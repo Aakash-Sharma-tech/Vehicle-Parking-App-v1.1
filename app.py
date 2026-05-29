@@ -45,20 +45,11 @@ def create_admin_user():
         db.session.commit()
         print("Default admin user created successfully!")
 
-def init_database():
-    """Initialize database and create tables"""
-    with app.app_context():
-        # Create all tables
-        db.create_all()
-        print("Database tables created successfully!")
-        
-        # Create default admin user
-        create_admin_user()
+# Auto-initialize database tables and admin user on startup
+with app.app_context():
+    db.create_all()
+    create_admin_user()
 
 if __name__ == '__main__':
-    # Initialize database on first run
-    if not os.path.exists('parking_app.db'):
-        init_database()
-    
-    # Run the application
+    # Run the application (for local execution)
     app.run(debug=True, host='0.0.0.0', port=5000)

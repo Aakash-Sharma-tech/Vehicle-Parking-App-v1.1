@@ -6,8 +6,11 @@ class Config:
     # Secret key for session management and CSRF protection
     SECRET_KEY = os.environ.get('SECRET_KEY') or '24f2003480'
     
-    # Database configuration - SQLite for local development
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:///parking_app.db'
+    # Database configuration - SQLite for local development, dynamically corrected for Postgres in production
+    _db_url = os.environ.get('DATABASE_URL')
+    if _db_url and _db_url.startswith("postgres://"):
+        _db_url = _db_url.replace("postgres://", "postgresql://", 1)
+    SQLALCHEMY_DATABASE_URI = _db_url or 'sqlite:///parking_app.db'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     
     # Session configuration
